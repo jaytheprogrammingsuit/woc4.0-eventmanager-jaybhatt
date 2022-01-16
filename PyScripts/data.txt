@@ -1,0 +1,4 @@
+Hello guy's, 
+	My name is jay bhatt. here, i used 2 python libraries.
+1)gTTS (Google Text-to-Speech)is a Python library and CLI tool to interface with Google Translate text-to-speech API. ... The output of the converted text is stored in the form of speech in the tts variable. The tts. save function allows us to save the converted speech in a format that allows us to play sounds.
+2)The playsound module contains only a single function named playsound(). It requires one argument: the path to the file with the sound we have to play. It can be a local file, or a URL.It works with both WAV and MP3 files.
