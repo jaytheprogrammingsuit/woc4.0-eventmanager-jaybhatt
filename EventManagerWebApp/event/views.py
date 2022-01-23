@@ -1,8 +1,9 @@
-from datetime import date
 from django.shortcuts import render
 from django.utils.datastructures import MultiValueDictKeyError
 #from django.http import HttpResponse
 from django.contrib import messages
+from datetime import date
+import datetime
 
 #from event.models import event_tbl
 #from . import models
@@ -10,7 +11,6 @@ from .models import event_tbl
 from .models import participant_tbl
 
 # Create your views here.
-
 def index(request):
     return render(request, 'index.html')
 
@@ -18,7 +18,8 @@ def events(request):
     return render(request, 'events.html')
 
 def eventRegistration(request):
-    #params = {'submit':False}
+    params=dict()
+    params['today_date'] = datetime.datetime.now()
     if request.method=="POST" :
         print("this is post")
         name = request.POST['ename']
@@ -38,7 +39,7 @@ def eventRegistration(request):
             messages.error(request, "Event name should be distinct.")
         #params = {'submit':True}
 
-    return render(request, 'eventRegistration.html')
+    return render(request, 'eventRegistration.html', params)
 
 def participantRegistration(request):
     allData = event_tbl.objects.all()

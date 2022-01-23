@@ -47,21 +47,21 @@
             {% csrf_token %}
             <div class="col-md-6">
                 <label for="inputName" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="inputName">
+                <input type="text" class="form-control" name="name" id="inputName" required />
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" name="pemail" id="inputEmail4">
+                <input type="email" class="form-control" name="pemail" id="inputEmail4" required />
             </div>
             <div class="col-16">
                 <label for="contact" class="form-label">Contact</label>
-                <input type="tel" class="form-control" name="contact" id="contact">
+                <input type="tel" class="form-control" name="contact" id="contact" required />
             </div>
 
             <div class="col-md-6">
                 <label for="floatingTextarea2" class="form-label">Event name</label>
                 <div class="dropdown">
-                    <select class="btn w-100 border dropdown-toggle" name="ename" id="cars">
+                    <select class="btn w-100 border dropdown-toggle" name="ename" id="cars" required>
                         <option class="dropdown-item">Available events for registration</option>
                         {% for event in data %}
                         {% if event.deadline >= today_date %}
@@ -97,7 +97,7 @@
             </div>
 
             <div class="col-12 mt-4">
-                <button type="submit" class="btn btn-primary" onclick="successMsg()">Register</button>
+                <button type="submit" class="btn btn-primary">Register</button>
                 <button type="reset" class="btn btn-secondary">Cancel</button>
             </div>
         </form>
@@ -107,12 +107,11 @@
     <!-- Include Footer -->
     {% include "footer.html" %}
     <script>
-        //for submited msg
+        /*for submited msg
         function successMsg() {
             alert("Form Submited!!");
-        }
-    </script>
-    <script>
+        }*/
+
         //for no. of ppl if grp then enable to modify
         var radiobtn1 = document.querySelector('#rtype1');
         var radiobtn2 = document.querySelector('#rtype2');
