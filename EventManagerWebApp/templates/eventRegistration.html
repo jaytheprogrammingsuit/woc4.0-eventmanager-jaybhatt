@@ -27,40 +27,40 @@
             {% csrf_token %}
             <div class="col-16">
                 <label for="inputName" class="form-label">Event Name</label>
-                <input type="text" name="ename" class="form-control" id="inputName">
+                <input type="text" name="ename" class="form-control" id="inputName" required />
             </div>
             <div class="col-16">
                 <label for="floatingTextarea2" class="form-label">Description of the event</label>
-                <textarea class="form-control" name="desc" id="floatingTextarea2" style="height: 100px"></textarea>
+                <textarea class="form-control" name="desc" id="floatingTextarea2" style="height: 100px" required></textarea>
             </div>
             <div class="col-16">
                 <label for="inputName" class="form-label">Poster Link</label>
-                <input type="text" class="form-control" name="plink" id="inputName">
+                <input type="text" class="form-control" name="plink" id="inputName" required />
             </div>
             <div class="col-md-6">
                 <label for="time" class="form-label">From (date/time)</label>
-                <input class="form-control" name="from" type="datetime-local" id="time1" onchange="ft_date()" />
+                <input class="form-control" name="from" type="datetime-local" required id="time1" onchange="ft_date()" />
             </div>
             <div class="col-md-6">
                 <label for="time" class="form-label">To (date/time)</label>
-                <input class="form-control" name="to" type="datetime-local" id="time2" onchange="ft_date()" />
+                <input class="form-control" name="to" type="datetime-local" required id="time2" onchange="ft_date()" />
             </div>
 
             <div class="col-md-12">
                 <label for="time" class="form-label">Registration deadline</label>
-                <input class="form-control" name="deadline" type="date" id="time" />
+                <input class="form-control" name="deadline" type="date" id="time" required />
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Host Email</label>
-                <input type="email" name="hemail" class="form-control" id="inputEmail4">
+                <input type="email" name="hemail" class="form-control" id="inputEmail4" required />
             </div>
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Host Password</label>
-                <input type="password" name="hpass" class="form-control" id="inputPassword4">
+                <input type="password" name="hpass" class="form-control" id="inputPassword4" required />
             </div>
 
             <div class="col-12 mt-4">
-                <button type="submit" class="btn btn-primary" onclick="successMsg()">Register</button>
+                <button type="submit" class="btn btn-primary">Register</button>
                 <button type="reset" class="btn btn-secondary">Cancel</button>
             </div>
         </form>
@@ -69,26 +69,29 @@
     <!-- Include Footer -->
     {% include "footer.html" %}
     <script>
-        function successMsg() {
-            alert("Form Submited!!");
-        }
 
         function ft_date() {
-            var today = new Date();
+            //var today = new Date();
             var f = document.querySelector('#time1');
             var t = document.querySelector('#time2');
-            //var ppl1 = document.querySelector('#ppl1');
 
-            f.addEventListener('input,change', function () {
-                alert(f.value);
-                    //this.value
-                //}
-            });
+            /*
+            f.addEventListener('change', function () {
+                alert(f.value +" --- " +'{{today_date}}'+" ----- "+ today.now());
+                if(f.value < '{{today_date}}')
+                {
+                    alert("You can't register past event !!");
+                    f.value = null;
+                }
+            }); */
 
             t.addEventListener('change', function () {
-                //if (this.checked) {
-                    alert("im t");
-                //}
+                
+                if (f.value > t.value) {
+                    alert("To(date/time) of an event should be greater than the from(date/time) !!");
+                    t.value = null;
+                    t.focus();
+                }
             });
         }
     </script>
