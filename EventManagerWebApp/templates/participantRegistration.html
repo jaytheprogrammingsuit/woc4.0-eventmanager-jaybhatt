@@ -28,6 +28,7 @@
         {% if event.deadline >= today_date %}
         <hr class="bold" style="height: 5px; text-align:left;margin-left:0">
         <ul class="list-group list-group-flush">
+            <li class="list-group-item">Event Id: {{event.id}}</li>
             <li class="list-group-item">Event Name : {{event.name}}</li>
             <li class="list-group-item">Descirption : {{event.desciption}}</li>
             <li class="list-group-item">Poster Link : {{event.poster_link}}</li>
