@@ -1,3 +1,6 @@
+from twilio.rest import Client
+import smtplib
+#from django.dispatch import receiver
 from django.shortcuts import render
 from django.utils.datastructures import MultiValueDictKeyError
 #from django.http import HttpResponse
@@ -11,6 +14,31 @@ from .models import event_tbl
 from .models import participant_tbl
 
 # Create your views here.
+def sendEmail(email, msg):
+    sender_email = "USER EMAIL"
+    receiver_email = email
+    password = "USER PASSWORD"
+
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.starttls()
+    server.login(sender_email, password)
+    print('login successfull!')
+    server.sendmail(sender_email, receiver_email, msg)
+    print('Email sent')
+
+def sendSms(pnumber,msg):
+    account_sid = "ACCOUNT SID"
+    auth_token = "AUTH TOKEN"
+
+    client = Client(account_sid, auth_token)
+
+    sms = client.messages.create(
+        body = msg,
+        from_ = 'TWILIO NUMBER',
+        to = pnumber
+    )
+    print(sms.sid)
+
 def index(request):
     return render(request, 'index.html')
 
@@ -34,6 +62,8 @@ def eventRegistration(request):
         data = event_tbl(name=name, desciption=desc, poster_link=plink, from_dt=fromdt, to_dt=todt, deadline=deadline, email=hemail, password=hpass)
         try:
             data.save()
+            msg = "Hello "+hemail+", you are registered the new event named "+name+"\n\nThis all are the information about your event! \nEvent Name :"+name+"\nDescription :"+desc+"\nPoster Link"+plink+"\nStart Date :"+fromdt+"\nEnd Date :"+todt+"\nDeadline :"+deadline+"\nEvent-Password :"+hpass
+            sendEmail(hemail, msg)
             messages.success(request, "Registration Successfull!!")
         except:
             messages.error(request, "Event name should be distinct.")
@@ -75,9 +105,17 @@ def participantRegistration(request):
 
         if(status) :
             data = participant_tbl(name=name, contact=contact, email=pemail, event_name=ename, reg_type=rtype, people=ppl)
-            data.save()
             params['submit']=True
+            msg = "Hello "+pemail+", You have registered in an event called "+ename+"\n\nYour Registered details \nName : "+name+"\nContact : "+contact+" \nRegisteration Type : "+rtype+"\nTotal Number of. People : "+str(ppl)
+            sendEmail(pemail, msg)
+            event_data = event_tbl.objects.get(name=ename)
+            sms_msg = "Hey "+name+", \n You have registered in an event called "+event_data.name+"\n\nYour Regsitered details \nEvent Unique ID : "+str(event_data.id)+ "\nEvent Description : "+event_data.desciption+"\nEvent Poster : "+ event_data.poster_link +"\nStart Date : " + str(event_data.from_dt) + "\nEnd Date : "+ str(event_data.to_dt) +"\nIf you have any query then contcat, Host Email : " + event_data.email
+            ph = "+91"+str(contact)
+            sendSms(ph, sms_msg)
+            data.save()
             messages.success(request, "Registration Successfull!!")
+        else :
+            messages.success(request, "You can't apply twice to this event!!")
             
     return render(request, 'participantRegistration.html', params)
     
