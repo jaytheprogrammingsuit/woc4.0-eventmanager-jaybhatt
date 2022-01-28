@@ -42,8 +42,29 @@ def sendSms(pnumber,msg):
 def index(request):
     return render(request, 'index.html')
 
-def events(request):   
+def events(request):
+    if request.method=="POST" :
+        #print("this is post")
+        email = request.POST['hemail']
+        psw = request.POST['hpass']
+        #try :
+        event_data = event_tbl.objects.filter(email=email, password=psw)
+        params = {'data':event_data}
+        #print (event_data.name)
+        #eventDashboard(request)
+        return render(request, 'eventDashboard.html', params)
+        #except :
+        #messages.success(request, "Login Failed!!")
     return render(request, 'events.html')
+
+def eventDashboard(request):
+    return render(request, 'eventDashboard.html')
+
+def participantDetails(request, name):
+    print(name)
+    event_data = participant_tbl.objects.filter(event_name=name)
+    params = {'data':event_data}
+    return render(request, 'participantDetails.html', params)
 
 def eventRegistration(request):
     params=dict()
@@ -105,14 +126,18 @@ def participantRegistration(request):
 
         if(status) :
             data = participant_tbl(name=name, contact=contact, email=pemail, event_name=ename, reg_type=rtype, people=ppl)
+            data.save()
             params['submit']=True
             msg = "Hello "+pemail+", You have registered in an event called "+ename+"\n\nYour Registered details \nName : "+name+"\nContact : "+contact+" \nRegisteration Type : "+rtype+"\nTotal Number of. People : "+str(ppl)
             sendEmail(pemail, msg)
             event_data = event_tbl.objects.get(name=ename)
             sms_msg = "Hey "+name+", \n You have registered in an event called "+event_data.name+"\n\nYour Regsitered details \nEvent Unique ID : "+str(event_data.id)+ "\nEvent Description : "+event_data.desciption+"\nEvent Poster : "+ event_data.poster_link +"\nStart Date : " + str(event_data.from_dt) + "\nEnd Date : "+ str(event_data.to_dt) +"\nIf you have any query then contcat, Host Email : " + event_data.email
             ph = "+91"+str(contact)
-            sendSms(ph, sms_msg)
-            data.save()
+            try :
+                sendSms(ph, sms_msg)
+            except :
+                messages.success(request, "This mobile number is not verified on twilio, so can't send the sms!!")
+                
             messages.success(request, "Registration Successfull!!")
         else :
             messages.success(request, "You can't apply twice to this event!!")

@@ -10,14 +10,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Events Detail</title>
+    <title>Event Host Login</title>
 </head>
 
 <body>
     <!-- Include header -->
     {% include "header.html" %}
 
-    <h1 class="my-5 py-5">Event Dashboard</h1>
+    {% for msg in messages %}
+    <script> alert('{{msg}}'); </script>
+    {% endfor %}
+    
+    <div class="container my-5 py-5">
+        <h4 class="text-center my-3">Host Login</h4>
+        <form action='events' method="post" class="row g-3 mx-5 px-5">
+            {% csrf_token %}
+
+            <div class="col-16">
+                <label for="inputEmail4" class="form-label">Host Email</label>
+                <input type="email" name="hemail" class="form-control" id="inputEmail4" required />
+            </div>
+            <div class="col-16">
+                <label for="inputPassword4" class="form-label">Host Password</label>
+                <input type="password" name="hpass" class="form-control" id="inputPassword4" required />
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
 
     <!-- Include Footer -->
     {% include "footer.html" %}
