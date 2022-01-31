@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from twilio.rest import Client
 import smtplib
 #from django.dispatch import receiver
@@ -15,9 +16,9 @@ from .models import participant_tbl
 
 # Create your views here.
 def sendEmail(email, msg):
-    sender_email = "USER EMAIL"
+    sender_email = "eventmanager21108@gmail.com"
     receiver_email = email
-    password = "USER PASSWORD"
+    password = "Woc@EventManager26"
 
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()
@@ -27,14 +28,14 @@ def sendEmail(email, msg):
     print('Email sent')
 
 def sendSms(pnumber,msg):
-    account_sid = "ACCOUNT SID"
-    auth_token = "AUTH TOKEN"
+    account_sid = "AC08b217ac0b9b8d4bd9506c1fbfb759f5"
+    auth_token = "c179b994b89041d37de6a010cfc6d45c"
 
     client = Client(account_sid, auth_token)
 
     sms = client.messages.create(
         body = msg,
-        from_ = 'TWILIO NUMBER',
+        from_ = '+18045717572',
         to = pnumber
     )
     print(sms.sid)
@@ -42,19 +43,28 @@ def sendSms(pnumber,msg):
 def index(request):
     return render(request, 'index.html')
 
+def logout(request):
+    request.session['hEmail'] = NULL
+    return render(request, 'index.html')
+
 def events(request):
     if request.method=="POST" :
         #print("this is post")
         email = request.POST['hemail']
         psw = request.POST['hpass']
-        #try :
-        event_data = event_tbl.objects.filter(email=email, password=psw)
-        params = {'data':event_data}
-        #print (event_data.name)
-        #eventDashboard(request)
-        return render(request, 'eventDashboard.html', params)
-        #except :
-        #messages.success(request, "Login Failed!!")
+        try :
+            event_data = event_tbl.objects.filter(email=email, password=psw)
+            if event_data :
+                request.session['hEmail'] = email
+                params = {'data':event_data}
+                #print (event_data.name)
+                #eventDashboard(request)
+                return render(request, 'eventDashboard.html', params)
+            else :
+                messages.success(request, "Login Failed!!")
+
+        except :
+            messages.error(request, "Login Failed!!")
     return render(request, 'events.html')
 
 def eventDashboard(request):

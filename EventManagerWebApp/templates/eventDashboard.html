@@ -14,6 +14,14 @@
 </head>
 
 <body>
+    <li class="nav-item">
+        {% if 'hostEmail' in request.session %}
+          <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'logout' %}">Login</a>
+        {% endif %}
+        </li>
+        
     <!-- Include header -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary">
         <div class="container-fluid">
@@ -26,17 +34,21 @@
             <div class="nav justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Hello, {{data.email}}</a>
+                        <a class="nav-link active" href="">Hello, {{request.session.hEmail}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">Logout</a>
+                        <a class="nav-link active" href="logout">Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    
+    {% if 'hEmail' not in request.session %}
+        {% url '/'}
+    {% endif %}
 
-    <div class="my-5 py-5"></div>
+    <div class="py-5"></div>
     <div class="row px-3">
         {% for data in data %}
         <div class="col-sm-6">
