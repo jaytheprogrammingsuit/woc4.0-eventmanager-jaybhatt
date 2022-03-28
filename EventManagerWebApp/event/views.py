@@ -16,9 +16,9 @@ from .models import participant_tbl
 
 # Create your views here.
 def sendEmail(email, msg):
-    sender_email = "eventmanager21108@gmail.com"
+    sender_email = "SENDER_EMAIL"
     receiver_email = email
-    password = "Woc@EventManager26"
+    password = "SENDER_PASSWORD"
 
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()
@@ -28,14 +28,14 @@ def sendEmail(email, msg):
     print('Email sent')
 
 def sendSms(pnumber,msg):
-    account_sid = "AC08b217ac0b9b8d4bd9506c1fbfb759f5"
-    auth_token = "c179b994b89041d37de6a010cfc6d45c"
+    account_sid = ""  //TWILIO SID
+    auth_token = "" //TWILIO AUTH TOKEN
 
     client = Client(account_sid, auth_token)
 
     sms = client.messages.create(
         body = msg,
-        from_ = '+18045717572',
+        from_ = '', //TWILIO GENERATED NUMBER
         to = pnumber
     )
     print(sms.sid)
